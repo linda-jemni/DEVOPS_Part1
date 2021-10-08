@@ -1,4 +1,4 @@
-- hosts: s2.infra,s1.infra
+- hosts: s2.infra,s3.infra,s4.infra,s5.infra,s1.infra
   become: yes
   ignore_unreachable: true
   tasks:
@@ -81,6 +81,8 @@
 
 
 - hosts: s2.infra, s3.infra
+  become: yes
+  ignore_unreachable: true
   tasks:
       - name : Install packages
         apt:
