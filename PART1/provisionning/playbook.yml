@@ -44,40 +44,40 @@
       shell:
         cmd: echo "dhcp-host=08:00:27:5b:52:42,192.168.50.15" >> /mac_mapping.conf
 
-    - name : Install packages
-      apt:
-        name:
-          - dnsmasq
-          - resolvconf
+    # - name : Install packages
+    #   apt:
+    #     name:
+    #       - dnsmasq
+    #       - resolvconf
 
-    - name : configure dnsmasq
-      shell:
-        cmd: echo "dhcp-option=3" >> /etc/dnsmasq.conf
+    # - name : configure dnsmasq
+    #   shell:
+    #     cmd: echo "dhcp-option=3" >> /etc/dnsmasq.conf
     
-    - name : configure dnsmasq#1
-      shell:
-        cmd: echo "dhcp-range=192.168.50.10,192.168.50.200" >> /etc/dnsmasq.conf
+    # - name : configure dnsmasq#1
+    #   shell:
+    #     cmd: echo "dhcp-range=192.168.50.10,192.168.50.200" >> /etc/dnsmasq.conf
 
-    - name : configure dnsmasq
-      shell:
-        cmd: cat /mac_mapping.conf >> /etc/dnsmasq.conf
+    # - name : configure dnsmasq
+    #   shell:
+    #     cmd: cat /mac_mapping.conf >> /etc/dnsmasq.conf
     
     - name : start dnsmasq service
       shell:
         cmd: systemctl start dnsmasq
           
-- hosts: s2.infra,s3.infra,s4.infra,s5.infra
-  become: yes
-  ignore_unreachable: true
-  tasks:
+# - hosts: s2.infra,s3.infra,s4.infra,s5.infra
+#   become: yes
+#   ignore_unreachable: true
+#   tasks:
 
-    - name : connect dhclient to s1.infra to get new ip adress
-      shell:
-        cmd: dhclient -r eth1
+#     - name : connect dhclient to s1.infra to get new ip adress
+#       shell:
+#         cmd: dhclient -r eth1
     
-    - name : connect dhclient to s1.infra to get new ip adress#
-      shell:
-        cmd: dhclient eth1
+#     - name : connect dhclient to s1.infra to get new ip adress#
+#       shell:
+#         cmd: dhclient eth1
 
 
 - hosts: s2.infra, s3.infra
@@ -129,5 +129,4 @@
       - name : Reload Apache
         shell: 
           cmd: "systemctl reload apache2"
-        
-        when: hosts.stdout.find("127.0.0.1") !== -1
+
