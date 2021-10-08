@@ -29,7 +29,9 @@ apt-get install -y \
     net-tools \
     bash \
     sudo \
-    software-properties-common
+    software-properties-common \
+    ansible
+
 
 
 if [ "$HOSTNAME" = "s1.infra" ]; then
@@ -59,10 +61,6 @@ fi
 # 		puppet
 # fi
 
-# Désactive l'update automatique du cache apt + indexation (lourd en CPU)
-cat >> /etc/apt/apt.conf.d/99periodic-disable <<MARK
-APT::Periodic::Enable "0";
-MARK
 
 
 echo "SUCCESS."

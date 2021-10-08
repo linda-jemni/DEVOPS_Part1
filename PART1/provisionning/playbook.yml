@@ -1,0 +1,133 @@
+- hosts: s2.infra,s1.infra
+  become: yes
+  ignore_unreachable: true
+  tasks:
+    - name : Intall packages
+      apt:
+        name:
+          - git
+          - net-tools
+          - sudo
+          - ansible
+          - bash
+
+    - name : get mac adresses of s2
+      shell: 
+        cmd: cat /sys/class/net/eth1/address
+      register: s2_mac
+      when: inventory_hostname == 's2.infra'
+
+    - name : get mac adresses of s2
+      shell: 
+        cmd: cat /sys/class/net/eth1/address
+      register: s3_mac
+      when: inventory_hostname == 's3.infra'
+
+- hosts: s1.infra
+  become: yes
+  ignore_unreachable: true
+  tasks:
+
+    - name : save mac adress map for s2.infra
+      shell:
+        cmd: echo "dhcp-host=08:00:27:9d:b8:ee,192.168.50.12" >> /mac_mapping.conf
+
+    - name : save mac adress map for s3.infra
+      shell:
+        cmd: echo "dhcp-host=08:00:27:d4:53:db,192.168.50.13" >> /mac_mapping.conf
+    
+    - name : save mac adress map for s4.infra
+      shell:
+        cmd: echo "dhcp-host=08:00:27:77:53:00,192.168.50.14" >> /mac_mapping.conf
+    
+    - name : save mac adress map for s5.infra
+      shell:
+        cmd: echo "dhcp-host=08:00:27:5b:52:42,192.168.50.15" >> /mac_mapping.conf
+
+    - name : Install packages
+      apt:
+        name:
+          - dnsmasq
+          - resolvconf
+
+    - name : configure dnsmasq
+      shell:
+        cmd: echo "dhcp-option=3" >> /etc/dnsmasq.conf
+    
+    - name : configure dnsmasq#1
+      shell:
+        cmd: echo "dhcp-range=192.168.50.10,192.168.50.200" >> /etc/dnsmasq.conf
+
+    - name : configure dnsmasq
+      shell:
+        cmd: cat /mac_mapping.conf >> /etc/dnsmasq.conf
+    
+    - name : start dnsmasq service
+      shell:
+        cmd: systemctl start dnsmasq
+          
+- hosts: s2.infra,s3.infra,s4.infra,s5.infra
+  become: yes
+  ignore_unreachable: true
+  tasks:
+
+    - name : connect dhclient to s1.infra to get new ip adress
+      shell:
+        cmd: dhclient -r eth1
+    
+    - name : connect dhclient to s1.infra to get new ip adress#
+      shell:
+        cmd: dhclient eth1
+
+
+- hosts: s2.infra, s3.infra
+  tasks:
+      - name : Install packages
+        apt:
+          name:
+           - apache2
+           - php7.3
+      - name : Create Dossier wordpress
+        file:
+          state: directory
+          path: /usr/src/wordpress
+                
+      - name : WordPress Download ZIP
+        get_url: 
+          url: https://fr.wordpress.org/latest-fr_FR.tar.gz
+          dest: /usr/src/wordpress
+      - name : Dezippe Dowload Wordpress
+        unarchive: 
+          remote_src: yes
+          src: /usr/src/wordpress/wordpress-5.8.1-fr_FR.tar.gz
+          dest: /usr/src/wordpress
+          
+      - name : Create directories in /var/www/xxxx
+        file:
+          state: directory
+          path: /var/www/wordpress
+      - name : Copier le wordpress in /var/www/xxxx
+        shell:
+          cmd: "cp -r /usr/src/wordpress/. /var/www/wordpress"
+        
+      - name : Autorisate apache to write inside
+        file:
+          path: /var/www/wordpress
+          recurse: yes
+          owner: www-data
+          group: www-data
+
+      - name : Mouve config file
+        copy:
+          src: 'config_files/wordpress'
+          dest: '/etc/apache2/sites-available/wordpress.conf'
+
+      - name : Activer a2ensite
+        shell:
+          cmd: "a2ensite wordpress"
+
+      - name : Reload Apache
+        shell: 
+          cmd: "systemctl reload apache2"
+        
+        when: hosts.stdout.find("127.0.0.1") !== -1

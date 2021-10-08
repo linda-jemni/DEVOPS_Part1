@@ -1,0 +1,25 @@
+s1.infra ansible_user=root
+s2.infra ansible_user=root
+s3.infra ansible_user=root
+s4.infra ansible_user=root
+s5.infra ansible_user=root
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python3
+
+[all_hosts]
+s1.infra
+s2.infra
+s3.infra
+s4.infra
+s5.infra
+
+
+[s1.infra]
+s1.infra
+
+[other_servers]
+s2.infra
+s3.infra
+s4.infra
+s5.infra
