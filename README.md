@@ -1,6 +1,7 @@
 # DEVOPS_Part1
 
 1- Preparation de l'infrastructure 
+
     - Ecriture du fichier de configuration vagrantfile pour lancer nos 5 serveurs
     - Mise en place d'une conf réseau interne virtuelle entre les 5 machine inspiration de l'architecture VRack de OVH
 
@@ -16,7 +17,6 @@ Pour tester le lancement des 5 machines il suffit de lancer : vagrant up
 - concevoir une config ansible pour automatiser : 
 - les spécifité réseaux , 
 - instalation des services fournis par le mini-cluster)
-    
     Config réseau des 5 serveurs
     - se former sur l'utilisation DNS masque et l'installer sur le serveur s0.infra 
     - configurer le service DHCP sur le serveur s0.infra
