@@ -1,5 +1,4 @@
 # DEVOPS_Part1
-# DEVOPS_Part1
 
 1- Preparation de l'infrastructure 
     - Ecriture du fichier de configuration vagrantfile pour lancer nos 5 serveurs
