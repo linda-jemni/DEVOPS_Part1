@@ -18,18 +18,18 @@ Pour tester le lancement des 5 machines il suffit de lancer : vagrant up
 - instalation des services fournis par le mini-cluster)
     
     Config réseau des 5 serveurs
-        se former sur l'utilisation DNS masque et l'installer sur le serveur s0.infra 
-        configurer le service DHCP sur le serveur s0.infra
-        configurer un service DNS sur le même serveur
-        Indiquer à toute les machines pour qu’elles utilisent s0.infra comme serveur DNS principal.
+    - se former sur l'utilisation DNS masque et l'installer sur le serveur s0.infra 
+    - configurer le service DHCP sur le serveur s0.infra
+    - configurer un service DNS sur le même serveur
+    - Indiquer à toute les machines pour qu’elles utilisent s0.infra comme serveur DNS principal.
     
     Installation des services 
-        Installer Apache 2 + PHP 7 sur s1.infra et s2.infra
-        Installer HAproxy sur s0.infra
-        Installer MariaDB sur s3.infra
-        Installer NFS Server sur s4.infra
+    - Installer Apache 2 + PHP 7 sur s1.infra et s2.infra
+    - Installer HAproxy sur s0.infra
+    - Installer MariaDB sur s3.infra
+    - Installer NFS Server sur s4.infra
 
 3 - Déploiement de deux sites wordpress
 
-Download & install & configure automatiquement les trois sites wordpress sur les serveurs web
+Download & install & configure automatiquement les trois sites wordpress sur les serveurs web avec ansible 
 
